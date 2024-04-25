@@ -1,73 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Prerequisites
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Local Kubernetes instance
+Install Docker desktop:
+https://www.docker.com/get-started/
 
-## Description
+Enable kubernetes in Docker Desktop:
+https://docs.docker.com/desktop/kubernetes/
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+# Deployment
 
-```bash
-$ npm install
+```
+kubectl apply -k cluster-config
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+Add the following to /etc/hosts or c:\windows\system32\drivers\etc\hosts
+```
+127.0.0.1 pokemon-challenge.local-cluster
+::1 pokemon-challenge.local-cluster localhost
 ```
 
-## Test
+
+# Database setup
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+PGPASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+npm run typeorm \
+    -- migration:run \
+    -d db/dataSource.local-cluster.ts
+```
+Port forward:
+```bash
+kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Dev
 
-## Stay in touch
+## Get password
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+PGPASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+```
 
-## License
+## Generate migration
 
-Nest is [MIT licensed](LICENSE).
+```bash
+MIGRATION_NAME=MyEntityChange
+npm run typeorm \
+    -- migration:generate db/migrations/$MIGRATION_NAME \
+    -d db/dataSource.local-cluster.ts
+```
+
+## Revert migration
+
+```bash
+
+npm run typeorm \
+    -- migration:revert \
+    -d db/dataSource.local-cluster.ts
+```
+
+## Show applied migrations
+```bash
+npm run typeorm \
+    -- migration:show \
+    -d db/dataSource.local-cluster.ts
+```
+
+# TODO
+
+- [X] Create database in kubernetes or outside
+- [ ] Create initial migration for entities
+- [ ] Implement endpoints
+- [ ] Add pgadmin?
+- TDD:
+    - globalSetup and globalTeardown
+        kubectl apply -k test-cluster
+        kubectl delete -k test-cluster
+    - Can't connect to db over tcp without hacking nginx or using port forward
+    - Run tests as workflow in kubernetes?
+    - Skip automated set up and tear down for now!
+    - Assume existing and migrated DB
+    - Then run tests against that!
