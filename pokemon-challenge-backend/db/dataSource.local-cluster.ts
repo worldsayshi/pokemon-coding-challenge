@@ -5,11 +5,11 @@ let PORT = 5432;
 
 let connectionOptions: DataSourceOptions = {
   type: "postgres" as "postgres", // It could be mysql, mongo, etc
-  host: "localhost",
+  host: "pokemon-challenge.local-cluster",
   port: PORT,
-  username: "app",
+  username: "pokemon",
   password: process.env.PGPASSWORD,
-  database: "app",
+  database: "pokemon",
   synchronize: false, // if true, you don't really need migrations
   logging: true,
   entities: ["../src/**/*.entity{.ts,.js}"], // where our entities reside
