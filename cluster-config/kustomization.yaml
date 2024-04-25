@@ -1,0 +1,5 @@
+resources:
+- https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.22/releases/cnpg-1.22.0.yaml
+- pokemon-ns.yaml
+- pokemon-challenge-pg.yaml

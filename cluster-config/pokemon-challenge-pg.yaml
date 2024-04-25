@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pokemon-challenge-pg
+  namespace: pokemon
+spec:
+  instances: 1
+  primaryUpdateStrategy: unsupervised
+
+  storage:
+    size: 0.5Gi
+    storageClass: hostpath
+  
+  bootstrap:
+    initdb:
+      database: pokemon
