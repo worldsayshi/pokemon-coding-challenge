@@ -9,6 +9,7 @@ import { Pokemon } from "./pokemon/pokemon.entity";
 import { PokemonService } from './pokemon/pokemon.service';
 import { PokemonController } from './pokemon/pokemon.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PokemonModule } from './pokemon/pokemon.module';
 
 const sqlHost = process.env.POKEMON_SQL_HOST;
 const sqlPort = process.env.POKEMON_SQL_PORT;
@@ -18,21 +19,19 @@ const sqlPassword = process.env.POKEMON_SQL_PASSWORD;
 
 @Module({
   imports: [
-    HttpModule,
+    // HttpModule,
     ...([configModule].filter(x => x)),
-    TypeOrmModule.forFeature([Pokemon]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: sqlHost,
       port: parseInt(sqlPort) || 5432,
-      username: sqlPokemonUsername || 'app',
+      username: sqlPokemonUsername || 'pokemon',
       password: sqlPassword,
       database: sqlPokemonDb || 'pokemon',
       entities: [Pokemon],
       synchronize: false,
     }),
+    PokemonModule,
   ],
-  controllers: [PokemonController],
-  providers: [PokemonService],
 })
 export class AppModule {}

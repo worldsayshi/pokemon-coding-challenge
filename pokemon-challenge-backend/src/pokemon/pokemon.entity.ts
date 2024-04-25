@@ -38,10 +38,10 @@ export class Pokemon {
   @Column('text')
   egg: string;
 
-  @Column('float4')
+  @Column('float')
   spawn_chance: number;
 
-  @Column('float4')
+  @Column('float')
   avg_spawns: number;
 
   @Column('integer')
@@ -54,7 +54,7 @@ export class Pokemon {
   multipliers: number[];
 
   @Column({
-    type: "enum",
+    type: "simple-enum",// "enum",
     array: true,
     enum: Weakness,
     default: [],

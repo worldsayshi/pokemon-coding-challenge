@@ -35,6 +35,12 @@ Port forward:
 kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 ```
 
+# Run locally
+
+```bash
+POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+npm run start:dev
+```
 
 # Dev
 
@@ -72,8 +78,8 @@ npm run typeorm \
 # TODO
 
 - [X] Create database in kubernetes or outside
+- [ ] TDD: Implement endpoints and data ingestion
 - [ ] Create initial migration for entities
-- [ ] Implement endpoints
 - [ ] Add pgadmin?
 - TDD:
     - globalSetup and globalTeardown
@@ -84,3 +90,9 @@ npm run typeorm \
     - Skip automated set up and tear down for now!
     - Assume existing and migrated DB
     - Then run tests against that!
+
+# Known issues
+
+- Tried using sqlite for "mocking" postgres but got blocked because typeorm + sqlite seem to have a bug regarding enum arrays
+    - Maybe this one: https://github.com/typeorm/typeorm/issues/6326
+    - Let's use postgres for now
