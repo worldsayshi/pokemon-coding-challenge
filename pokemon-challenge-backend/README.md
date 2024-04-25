@@ -53,7 +53,7 @@ PGPASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq
 ## Generate migration
 
 ```bash
-MIGRATION_NAME=MyEntityChange
+MIGRATION_NAME=InitialPokemon
 npm run typeorm \
     -- migration:generate db/migrations/$MIGRATION_NAME \
     -d db/dataSource.local-cluster.ts

@@ -1,5 +1,4 @@
-import { DataSource } from "typeorm";
-import { DataSourceOptions } from "typeorm/data-source/DataSourceOptions";
+import { DataSource, DataSourceOptions } from "typeorm";
 
 let PORT = 5432;
 
@@ -12,7 +11,7 @@ let connectionOptions: DataSourceOptions = {
   database: "pokemon",
   synchronize: false, // if true, you don't really need migrations
   logging: true,
-  entities: ["../src/**/*.entity{.ts,.js}"], // where our entities reside
+  entities: ["./src/**/*.entity{.ts,.js}"], // where our entities reside
   migrations: ["db/migrations/*{.ts,.js}"], // where our migrations reside
 };
 

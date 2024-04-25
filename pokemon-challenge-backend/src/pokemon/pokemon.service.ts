@@ -12,8 +12,8 @@ export class PokemonService {
         private pokemonRepository: Repository<Pokemon>,
     ) {}
 
-    getPokemon(): Pokemon[] {
-        throw this.pokemonRepository.find({});
+    async getPokemon(): Promise<Pokemon[]> {
+        return this.pokemonRepository.find({});
     }
     update(pokemon: Pokemon) {
         throw new Error("Method not implemented.");
