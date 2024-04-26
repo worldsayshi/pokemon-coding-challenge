@@ -43,7 +43,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can insert (some of) the pokedex', async () => {
-    let sliceSize = 5;
+    let sliceSize = 20;
 
     let createRequests = preparePokemon(pokedex).slice(0,sliceSize).map((p) =>
       request(app.getHttpServer())
