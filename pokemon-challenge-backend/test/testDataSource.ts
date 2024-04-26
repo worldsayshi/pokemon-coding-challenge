@@ -5,7 +5,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 /*
     This is a workaround for TestingModules apparently not closing database connections properly
-    so we need to have access to the datasource.
+    so we need to have direct access to the "datasource", i.e. connection.
  */
 
 const sqlHost = process.env.POKEMON_SQL_HOST;
@@ -29,7 +29,7 @@ let dataSource = null;
 let dataSourceModule = null;
 
 export async function getDataSource (options?: DataSourceOptions) {
-    if(dataSource) return dataSource;
+    if (dataSource) return dataSource;
     dataSource = await new DataSource(options).initialize();
     return dataSource;
 }
@@ -44,5 +44,3 @@ export async function getModule () {
         },
     })
 }
-
-//export const testDataSourceModule = ;
