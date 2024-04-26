@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 't
 
 export enum Weakness {
   Fire = "Fire",
+  Ice = "Ice",
   Grass = "Grass",
   Poison = "Poison",
   Flying = "Flying",
