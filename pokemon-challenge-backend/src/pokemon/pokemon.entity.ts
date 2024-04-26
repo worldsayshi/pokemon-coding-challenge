@@ -9,7 +9,8 @@ export enum Weakness {
   Poison = "Poison",
   Flying = "Flying",
   Psychic = "Psychic",
-  Fighting = "Fighting"
+  Fighting = "Fighting",
+  Ground = "Ground"
 }
 
 @Entity()
@@ -35,7 +36,7 @@ export class Pokemon {
   @Column('text')
   candy: string;
 
-  @Column('integer')
+  @Column('integer', { default: 0 })
   candy_count: number;
 
   @Column('text')
