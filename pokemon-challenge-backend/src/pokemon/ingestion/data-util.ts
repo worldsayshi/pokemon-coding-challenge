@@ -22,3 +22,23 @@ export function preparePokemon(pokedex: Pokedex): any[] {
         };
     });
 }
+
+
+export function printAllWeaknesses(pokedex: Pokedex) {
+    let weaknesses = new Set();
+    for (let p of pokedex.pokemon) {
+      (p.weaknesses ?? []).forEach(w => {
+        //console.log(w);
+        weaknesses.add(w);
+      });
+      (p.type ?? []).forEach(w => {
+        //console.log(w);
+        weaknesses.add(w);
+      });
+    }
+    let out = "";
+    for (let w of weaknesses) {
+      out += (`${w} = "${w}",\n`);
+    }
+    console.log(out);
+  }

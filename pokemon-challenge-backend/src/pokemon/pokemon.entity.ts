@@ -4,20 +4,22 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 't
 export enum Weakness {
   Fire = "Fire",
   Ice = "Ice",
-  Water = "Water",
-  Grass = "Grass",
-  Poison = "Poison",
   Flying = "Flying",
   Psychic = "Psychic",
-  Fighting = "Fighting",
+  Grass = "Grass",
+  Poison = "Poison",
+  Water = "Water",
   Ground = "Ground",
   Rock = "Rock",
   Electric = "Electric",
   Bug = "Bug",
   Normal = "Normal",
+  Fighting = "Fighting",
   Fairy = "Fairy",
   Ghost = "Ghost",
-  Dark = "Dark"
+  Dark = "Dark",
+  Steel = "Steel",
+  Dragon = "Dragon",
 }
 
 @Entity()

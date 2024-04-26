@@ -5,9 +5,10 @@ import { PokemonModule } from './../src/pokemon/pokemon.module';
 import * as pokedex from "../../data/pokedex.json";
 import { preparePokemon } from './../src/pokemon/ingestion/data-util';
 import {getModule, getDataSource} from "./testDataSource";
-import { Pokemon } from 'src/pokemon/pokemon.entity';
+import { Pokemon } from './../src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
 import { AssertionError } from 'assert';
+import { Pokedex } from './../src/pokemon/ingestion/pokedex.type';
 
 
 const SECONDS = 1000;
