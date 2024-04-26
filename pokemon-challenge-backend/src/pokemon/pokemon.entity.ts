@@ -11,7 +11,8 @@ export enum Weakness {
   Psychic = "Psychic",
   Fighting = "Fighting",
   Ground = "Ground",
-  Rock = "Rock"
+  Rock = "Rock",
+  Electric = "Electric"
 }
 
 @Entity()
