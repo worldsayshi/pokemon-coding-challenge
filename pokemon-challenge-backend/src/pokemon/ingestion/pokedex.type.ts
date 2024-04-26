@@ -1,0 +1,8 @@
+export type InputPokemon = { id: number; num: string; name: string; img: string; type: string[]; height: string; weight: string; candy: string; candy_count: number; egg: string; spawn_chance: number; avg_spawns: number; spawn_time: string; multipliers: number[]; weaknesses: string[]; next_evolution: { num: string; name: string; }[]; prev_evolution?: undefined; } | {
+    id: number; num: string; name: string; img: string; type: string[]; height: string; weight: string; candy: string; candy_count: number; egg: string; spawn_chance: number; avg_spawns: number; spawn_time: string; //   type: 'sqlite',
+    multipliers: number[]; weaknesses: string[]; prev_evolution: { num: string; name: string; }[]; next_evolution: { num: string; name: string; }[];
+} | { id: number; num: string; name: string; img: string; type: string[]; height: string; weight: string; candy: string; egg: string; spawn_chance: number; avg_spawns: number; spawn_time: string; multipliers: any; weaknesses: string[]; prev_evolution: { num: string; name: string; }[]; candy_count?: undefined; next_evolution?: undefined; } | { id: number; num: string; name: string; img: string; type: string[]; height: string; weight: string; candy: string; egg: string; spawn_chance: number; avg_spawns: number; spawn_time: string; multipliers: any; weaknesses: string[]; candy_count?: undefined; next_evolution?: undefined; prev_evolution?: undefined; };
+
+export type Pokedex = {
+    pokemon: InputPokemon[];
+}

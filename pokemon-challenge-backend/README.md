@@ -42,6 +42,13 @@ POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o
 npm run start:dev
 ```
 
+# Run tests
+
+```bash
+POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+npm run test:e2e
+```
+
 # Dev
 
 ## Get password
@@ -96,3 +103,7 @@ npm run typeorm \
 - Tried using sqlite for "mocking" postgres but got blocked because typeorm + sqlite seem to have a bug regarding enum arrays
     - Maybe this one: https://github.com/typeorm/typeorm/issues/6326
     - Let's use postgres for now
+- "Jest did not exit one second after the test run has completed.
+
+    'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
+    Waiting for the debugger to disconnect..."

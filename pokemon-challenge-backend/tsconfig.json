@@ -22,7 +22,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "types": ["node", "jest", "@types/jest"],//,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": false
     //"assets": ["**/schema/**"]
   }
 }
