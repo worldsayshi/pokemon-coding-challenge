@@ -38,7 +38,6 @@ kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 # Run locally
 
 ```bash
-POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 npm run start:dev
 ```
 
@@ -85,7 +84,11 @@ npm run typeorm \
 # TODO
 
 - [X] Create database in kubernetes or outside
-- [ ] TDD: Implement endpoints and data ingestion
+- [X] Create a proper "test rig"
+- [ ] TDD: Implement endpoint(s) for data ingestion
+    - [ ] Recheck the requirements to be sure I'm onm the right track! <-- HERE!
+    - [ ] Bug: multiplier field should be a float, not an integer! Need a migration.
+- [ ] TDD: Implement other endpoints.
 - [ ] Create initial migration for entities
 - [ ] Add pgadmin?
 - TDD:
@@ -107,3 +110,10 @@ npm run typeorm \
 
     'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
     Waiting for the debugger to disconnect..."
+
+
+# Technical design considerations
+- Internal data structure is exposed in a "loosely coupled" way
+    - The Pokemon type in pokemon.entity is used both as a means for setting up the schema as well as providing the type for the pokemon.controller.
+    - This means that the database schema is coupled with the rest api.
+    - However, if there is a future need for the api and the db schema to diverge this can easily be changed without notifying consumers internally by using different types in the controller and the repository. So the coupling is thus of a loose kind.

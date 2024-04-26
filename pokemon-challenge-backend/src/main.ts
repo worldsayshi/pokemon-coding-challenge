@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './ExceptionsFilter';
+import { ValidationPipe } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -16,6 +17,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3100);
 }

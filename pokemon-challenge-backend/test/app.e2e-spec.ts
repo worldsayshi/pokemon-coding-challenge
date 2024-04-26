@@ -40,12 +40,20 @@ describe('AppController (e2e)', () => {
 
   it('Can insert (some of) the pokedex', async () => {
 
-    await (Promise.all(preparePokemon(pokedex).slice(0,1).map((p) =>
+    let createRequests = preparePokemon(pokedex).slice(0,1).map((p) =>
       request(app.getHttpServer())
         .post('/pokemon')
-        .send({pokemon: p})
-        .expect(200)
-    )));
+        .send(p)
+        .expect(201)
+    );
+
+    await (Promise.all([...createRequests]));
+
+    let r = await request(app.getHttpServer())
+      .get('/pokemon')
+      .expect(200);
+    
+    expect(r.body).toHaveLength(1);
 
   }, 70 * SECONDS);
 

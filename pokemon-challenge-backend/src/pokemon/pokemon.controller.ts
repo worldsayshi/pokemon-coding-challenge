@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon } from "./pokemon.entity";
 
@@ -20,7 +20,15 @@ export class PokemonController {
 
     // Update one Pokemon
     @Put()
-    updateDoc(@Body() pokemon: Pokemon) {
+    updatePokemon(@Body() pokemon: Pokemon) {
       return this.pokemonService.update(pokemon);
     }
+
+    // Post one Pokemon
+    @Post()
+    createPokemon(@Body() pokemon: Pokemon) {
+        console.log("pokemonpokemonpokemonpokemonpokemon", pokemon);
+        return this.pokemonService.create(pokemon);
+    }
+    
 }

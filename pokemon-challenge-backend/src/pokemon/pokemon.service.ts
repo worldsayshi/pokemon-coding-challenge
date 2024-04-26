@@ -18,4 +18,9 @@ export class PokemonService {
     update(pokemon: Pokemon) {
         throw new Error("Method not implemented.");
     }
+
+    async create(pokemon: Pokemon) {
+        let p = await this.pokemonRepository.create(pokemon);
+        return this.pokemonRepository.save(p);
+    }
 }
