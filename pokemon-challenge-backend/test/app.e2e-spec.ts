@@ -45,10 +45,10 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can insert (some of) the pokedex', async () => {
-    let sliceSize = 100;
+    //let sliceSize = 200;
 
-    let preparedPokemon = preparePokemon(pokedex).slice(0,sliceSize);
-    
+    let preparedPokemon = preparePokemon(pokedex);// .slice(0,sliceSize);
+
     for (let p of preparedPokemon) {
       try {
         await request(app.getHttpServer())
@@ -66,7 +66,7 @@ describe('AppController (e2e)', () => {
       .get('/pokemon')
       .expect(200);
     
-    expect(r.body).toHaveLength(sliceSize);
+    expect(r.body).toHaveLength(pokedex.pokemon.length);
 
   }, 70 * SECONDS);
 

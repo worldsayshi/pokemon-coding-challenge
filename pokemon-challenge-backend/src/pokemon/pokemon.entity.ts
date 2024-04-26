@@ -65,10 +65,10 @@ export class Pokemon {
   @Column('float')
   avg_spawns: number;
 
-  @Column('integer')
+  @Column('integer', { nullable: true })
   spawn_time_h: number;
 
-  @Column('integer')
+  @Column('integer', { nullable: true })
   spawn_time_m: number;
 
   @Column('float', { array: true, default: [] })

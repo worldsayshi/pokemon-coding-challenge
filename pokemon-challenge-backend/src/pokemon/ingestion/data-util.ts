@@ -1,3 +1,4 @@
+import { isNumber } from "class-validator";
 import { Pokemon, PokemonInput } from "../pokemon.entity";
 import { RawInputPokemon as RawPokemonInput, Pokedex } from "./pokedex.type";
 
@@ -11,7 +12,10 @@ export function preparePokemon(pokedex: Pokedex): any[] {
             multipliers,
             ...rest
         } = p;
-        const [spawn_time_h_s, spawn_time_m_s] = spawn_time.split(":");
+
+        const [spawn_time_h_s, spawn_time_m_s] = spawn_time.split(":").length === 2 ?
+            spawn_time.split(":") : [null, null];
+
         return {
             ...rest,
             height_m: Number.parseFloat(height.split(" ")[0]),
