@@ -16,7 +16,8 @@ export enum Weakness {
   Bug = "Bug",
   Normal = "Normal",
   Fairy = "Fairy",
-  Ghost = "Ghost"
+  Ghost = "Ghost",
+  Dark = "Dark"
 }
 
 @Entity()

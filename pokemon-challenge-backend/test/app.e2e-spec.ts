@@ -46,19 +46,32 @@ describe('AppController (e2e)', () => {
   it('Can insert (some of) the pokedex', async () => {
     let sliceSize = 100;
 
-    let createRequests = preparePokemon(pokedex).slice(0,sliceSize).map((p) =>
+    let preparedPokemon = preparePokemon(pokedex).slice(0,sliceSize)
+    /*.map((p) =>
       request(app.getHttpServer())
         .post('/pokemon')
         .send(p)
         .expect(201)
-    );
+    );*/
 
-    try {
-      await (Promise.all([...createRequests]));
-    } catch (error) {
-      throw new AssertionError({
-        message: "Error in POST request to /pokemon: " + error.message,
-      });
+    // try {
+    //   await (Promise.all([...createRequests]));
+    // } catch (error) {
+    //   throw new AssertionError({
+    //     message: "Error in POST request to /pokemon: " + error.message,
+    //   });
+    // }
+    for (let p of preparedPokemon) {
+      try {
+        await request(app.getHttpServer())
+          .post('/pokemon')
+          .send(p)
+          .expect(201);
+      } catch (error) {
+        throw new AssertionError({
+          message: "Error in POST request to /pokemon: " + error.message,
+        });
+      }
     }
     
     let r = await request(app.getHttpServer())
