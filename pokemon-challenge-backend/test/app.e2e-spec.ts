@@ -7,6 +7,7 @@ import { preparePokemon } from './../src/pokemon/ingestion/data-util';
 import {getModule, getDataSource} from "./testDataSource";
 import { Pokemon } from 'src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
+import { AssertionError } from 'assert';
 
 
 const SECONDS = 1000;
@@ -43,7 +44,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can insert (some of) the pokedex', async () => {
-    let sliceSize = 20;
+    let sliceSize = 100;
 
     let createRequests = preparePokemon(pokedex).slice(0,sliceSize).map((p) =>
       request(app.getHttpServer())
@@ -52,8 +53,14 @@ describe('AppController (e2e)', () => {
         .expect(201)
     );
 
-    await (Promise.all([...createRequests]));
-
+    try {
+      await (Promise.all([...createRequests]));
+    } catch (error) {
+      throw new AssertionError({
+        message: "Error in POST request to /pokemon: " + error.message,
+      });
+    }
+    
     let r = await request(app.getHttpServer())
       .get('/pokemon')
       .expect(200);
