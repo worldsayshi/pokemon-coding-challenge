@@ -10,7 +10,8 @@ export enum Weakness {
   Flying = "Flying",
   Psychic = "Psychic",
   Fighting = "Fighting",
-  Ground = "Ground"
+  Ground = "Ground",
+  Rock = "Rock"
 }
 
 @Entity()
@@ -26,6 +27,14 @@ export class Pokemon {
 
   @Column('text')
   img: string;
+
+  @Column({
+    type: "simple-enum",// "enum",
+    array: true,
+    enum: Weakness,
+    default: [],
+  })
+  type: Weakness[];
 
   @Column('float')
   height_m: number;

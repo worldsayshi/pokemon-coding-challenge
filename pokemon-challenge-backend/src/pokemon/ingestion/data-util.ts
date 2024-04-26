@@ -8,6 +8,7 @@ export function preparePokemon(pokedex: Pokedex): any[] {
             height,
             weight,
             spawn_time,
+            multipliers,
             ...rest
         } = p;
         const [spawn_time_h_s, spawn_time_m_s] = spawn_time.split(":");
@@ -17,6 +18,7 @@ export function preparePokemon(pokedex: Pokedex): any[] {
             weight_kg: Number.parseFloat(weight.split(" ")[0]),
             spawn_time_h: Number.parseInt(spawn_time_h_s),
             spawn_time_m: Number.parseInt(spawn_time_m_s),
+            multipliers: multipliers ?? [],
         };
     });
 }
