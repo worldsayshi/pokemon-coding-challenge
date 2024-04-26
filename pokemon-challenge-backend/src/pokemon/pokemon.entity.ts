@@ -1,3 +1,4 @@
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 
 export enum Weakness {
@@ -50,7 +51,7 @@ export class Pokemon {
   @Column('integer')
   spawn_time_m: number;
 
-  @Column('integer', { array: true, default: [] })
+  @Column('float', { array: true, default: [] })
   multipliers: number[];
 
   @Column({
@@ -61,10 +62,12 @@ export class Pokemon {
   })
   weaknesses: Weakness[];
 
+  @ApiHideProperty()
   @ManyToMany(type => Pokemon)
   @JoinTable()
   prev_evolution: Pokemon[];
 
+  @ApiHideProperty()
   @ManyToMany(type => Pokemon)
   @JoinTable()
   next_evolution: Pokemon[];
@@ -104,3 +107,16 @@ const apokemon = {
     "name": "Venusaur"
   }]
 };
+
+export class PokemonInput extends Pokemon {
+  @ApiProperty({
+    example: ["001"],
+    description: 'The num attribute of the previous evolution of this Pokemon',
+  })
+  prev_evolution_nums: string[];
+  @ApiProperty({
+    example: ["008"],
+    description: 'The num attribute of the next evolution of this Pokemon',
+  })
+  next_evolution_nums: string[];
+}

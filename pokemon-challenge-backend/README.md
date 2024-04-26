@@ -59,7 +59,7 @@ PGPASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq
 ## Generate migration
 
 ```bash
-MIGRATION_NAME=InitialPokemon
+MIGRATION_NAME=FixMultipliersColumnType
 npm run typeorm \
     -- migration:generate db/migrations/$MIGRATION_NAME \
     -d db/dataSource.local-cluster.ts
@@ -86,7 +86,9 @@ npm run typeorm \
 - [X] Create database in kubernetes or outside
 - [X] Create a proper "test rig"
 - [ ] TDD: Implement endpoint(s) for data ingestion
-    - [ ] Recheck the requirements to be sure I'm onm the right track! <-- HERE!
+    - [X] Recheck the requirements to be sure I'm onm the right track! <-- HERE!
+    - [ ] Bug: next_evolution and prev_evolution are shown as string[] in swagger. That's not good...
+        - I need to split the swagger type from the database type!
     - [ ] Bug: multiplier field should be a float, not an integer! Need a migration.
 - [ ] TDD: Implement other endpoints.
 - [ ] Create initial migration for entities

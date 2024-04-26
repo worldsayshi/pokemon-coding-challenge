@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
-import { Pokemon } from "./pokemon.entity";
+import { Pokemon, PokemonInput } from "./pokemon.entity";
 
 
 @Controller("pokemon")
@@ -26,8 +26,7 @@ export class PokemonController {
 
     // Post one Pokemon
     @Post()
-    createPokemon(@Body() pokemon: Pokemon) {
-        console.log("pokemonpokemonpokemonpokemonpokemon", pokemon);
+    createPokemon(@Body() pokemon: PokemonInput) {
         return this.pokemonService.create(pokemon);
     }
     
