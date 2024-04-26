@@ -5,12 +5,15 @@ import { PokemonModule } from './../src/pokemon/pokemon.module';
 import * as pokedex from "../../data/pokedex.json";
 import { preparePokemon } from './../src/pokemon/ingestion/data-util';
 import {getModule, getDataSource} from "./testDataSource";
+import { Pokemon } from 'src/pokemon/pokemon.entity';
+import { Repository } from 'typeorm';
 
 
 const SECONDS = 1000;
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let pokemonRepository: Repository<Pokemon>;
 
 
   beforeEach(async () => {
@@ -30,6 +33,7 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    pokemonRepository = moduleFixture.get('PokemonRepository');
   });
 
   it('/ (GET)', () => {
@@ -39,8 +43,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can insert (some of) the pokedex', async () => {
+    let sliceSize = 5;
 
-    let createRequests = preparePokemon(pokedex).slice(0,1).map((p) =>
+    let createRequests = preparePokemon(pokedex).slice(0,sliceSize).map((p) =>
       request(app.getHttpServer())
         .post('/pokemon')
         .send(p)
@@ -53,7 +58,7 @@ describe('AppController (e2e)', () => {
       .get('/pokemon')
       .expect(200);
     
-    expect(r.body).toHaveLength(1);
+    expect(r.body).toHaveLength(sliceSize);
 
   }, 70 * SECONDS);
 
@@ -65,7 +70,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  // afterEach(async () => {
-  //   await userRepository.query('DELETE FROM users');
-  // });
+  afterEach(async () => {
+    await pokemonRepository.query('DELETE FROM pokemon');
+  });
 });

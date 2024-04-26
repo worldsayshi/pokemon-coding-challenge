@@ -4,6 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 't
 export enum Weakness {
   Fire = "Fire",
   Ice = "Ice",
+  Water = "Water",
   Grass = "Grass",
   Poison = "Poison",
   Flying = "Flying",
@@ -25,10 +26,10 @@ export class Pokemon {
   @Column('text')
   img: string;
 
-  @Column('integer')
+  @Column('float')
   height_m: number;
 
-  @Column('integer')
+  @Column('float')
   weight_kg: number;
 
   @Column('text')

@@ -12,9 +12,7 @@ export class PokemonController {
 
     @Get()
     async getPokemon(): Promise<Pokemon[]> {
-        console.log("poke");
         let ps = await this.pokemonService.getPokemon();
-        console.log("poke 2");
         return ps;
     }
 
