@@ -20,18 +20,35 @@ export class PokemonService {
             name,
             order,
         } = query;
-        return this.pokemonRepository.find({
-            where: {
-                ...(name?.exact && {name: name.exact}),
-                ...(type && {type: ArrayContains(
-                    Array.isArray(type) ? type : [type]
-                ),})
-            },
-            ...(order && {order: order.reduce((prev, curr) => ({
+        let qb = this.pokemonRepository.createQueryBuilder()
+
+        if (name?.exact) {
+            qb = qb.where({name: name.exact});
+        }
+        if (type) {
+            qb = qb.where({type: ArrayContains(
+                Array.isArray(type) ? type : [type]
+            ),});
+        }
+        if (order) {
+            qb = qb.orderBy(order.reduce((prev, curr) => ({
                 ...prev,
                 [curr.name]: curr.order,
-            }), {})}),
-        });
+            }), {}));
+        }
+        return qb.getMany();
+        // return this.pokemonRepository.find({
+        //     where: {
+        //         ...(name?.exact && {name: name.exact}),
+        //         ...(type && {type: ArrayContains(
+        //             Array.isArray(type) ? type : [type]
+        //         ),})
+        //     },
+        //     ...(order && {order: order.reduce((prev, curr) => ({
+        //         ...prev,
+        //         [curr.name]: curr.order,
+        //     }), {})}),
+        // });
     }
 
     getById(id: number) {
@@ -45,11 +62,6 @@ export class PokemonService {
             next_evolution: pokemon.next_evolution_nums.map(num => ({num})),
         });
 
-        // return this.pokemonService.create({
-        //     ...pokemon,
-        //     prev_evolution: pokemon.prev_evolution_nums.map(num => ({num})),
-        //     next_evolution: pokemon.next_evolution_nums
-        // });
         return this.pokemonRepository.save(p)
     }
 }
