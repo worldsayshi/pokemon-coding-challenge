@@ -97,7 +97,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can retrieve Pokemon by exact name', async () => {
-    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
+    let preparedPokemon = preparePokemon(pokedex).slice(0, 4);
     let pokemonName = "Venusaur";
 
     await postPokemon(preparedPokemon, app);
@@ -117,15 +117,14 @@ describe('AppController (e2e)', () => {
     expect(p.name).toBe(pokemonName);
   });
 
-  it('Can retrieve Pokemon by fuzzy name search', async () => {
-    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
-    let pokemonName = "Venusaur";
+  test.each([["Venus", "Venusaur"], /*["sharmander","Charmander"]*/])('Can retrieve Pokemon by fuzzy name search', async (fuzzyPhrase, pokemonName) => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0, 6);
 
     await postPokemon(preparedPokemon, app);
     
     let q: PokemonQuery = {
       name: {
-        fuzzy: "Venus",
+        fuzzy: fuzzyPhrase,
       },
     };
 
@@ -135,7 +134,7 @@ describe('AppController (e2e)', () => {
       .expect(200);
 
     const [p] = res.body as Pokemon[];
-    expect(p.name).toBe(pokemonName);
+    expect(p?.name).toBe(pokemonName);
   });
 
   afterAll(async () => {
