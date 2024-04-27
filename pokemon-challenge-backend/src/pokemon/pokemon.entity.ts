@@ -1,6 +1,6 @@
 import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, PrimaryColumn, FindOptionsWhere } from 'typeorm';
+import { Transform, TransformFnParams } from 'class-transformer';
+import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
 
 export enum Weakness {
   Fire = "Fire",
@@ -95,41 +95,6 @@ export class Pokemon {
 
 }
 
-
-const apokemon = {
-  "id": 1,
-  "num": "001",
-  "name": "Bulbasaur",
-  "img": "http://www.serebii.net/pokemongo/pokemon/001.png",
-  "type": [
-    "Grass",
-    "Poison"
-  ],
-  "height": "0.71 m",
-  "weight": "6.9 kg",
-  "candy": "Bulbasaur Candy",
-  "candy_count": 25,
-  "egg": "2 km",
-  "spawn_chance": 0.69,
-  "avg_spawns": 69,
-  "spawn_time": "20:00",
-  "multipliers": [1.58],
-  "weaknesses": [
-    "Fire",
-    "Ice",
-    "Flying",
-    "Psychic"
-  ],
-  "next_evolution": [{
-    "num": "002",
-    "name": "Ivysaur"
-  }, {
-    "num": "003",
-    "name": "Venusaur"
-  }]
-};
-
-
 export class PokemonInput extends OmitType(Pokemon, ["prev_evolution", "next_evolution"] as const) {
   @ApiProperty({
     example: ["001"],
@@ -143,7 +108,23 @@ export class PokemonInput extends OmitType(Pokemon, ["prev_evolution", "next_evo
   next_evolution_nums: string[];
 }
 
+type SortProperty =
+  ("height_m"
+  | "weight_kg"
+  | "candy_count"
+  | "spawn_chance"
+  | "avg_spawns"
+  | "spawn_time_h"
+  | "spawn_time_m"
+);
+
 export class PokemonQuery {
-  type?: Weakness | Weakness[];
+  @Transform(singleItemToArray)
+  type?: Weakness[];
   name?: string;
+  sort?: SortProperty | SortProperty[];
+}
+
+function singleItemToArray ({key, value}: TransformFnParams) {
+  return Array.isArray(value) ? value : [value];
 }

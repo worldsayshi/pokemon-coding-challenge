@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon, PokemonInput, PokemonQuery } from "./pokemon.entity";
 
