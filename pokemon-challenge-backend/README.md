@@ -96,7 +96,8 @@ npm run typeorm \
     - [X] Get by id
     - [X] filter on type
     - [X] sorting by number properties
-    - [ ] fuzzy search by name (minimum length 3 characters)
+    - [X] fuzzy search by name
+    - [ ] (minimum length 3 characters) <-- HERE!!
     - [ ] Insert Pokemon with referenced Pokemon
         - https://github.com/typeorm/typeorm/issues/1224
         - Probably need bulk insert for this!?
