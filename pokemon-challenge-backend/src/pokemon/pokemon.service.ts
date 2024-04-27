@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Pokemon } from "./pokemon.entity";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Pokemon, PokemonInput } from "./pokemon.entity";
+import { DataSource, Repository } from "typeorm";
+import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
 
 
 @Injectable()
@@ -10,6 +10,8 @@ export class PokemonService {
     constructor(
         @InjectRepository(Pokemon)
         private pokemonRepository: Repository<Pokemon>,
+        @InjectDataSource()
+        private dataSource: DataSource,
     ) {}
 
     async getPokemon(): Promise<Pokemon[]> {
@@ -19,8 +21,20 @@ export class PokemonService {
         throw new Error("Method not implemented.");
     }
 
-    async create(pokemon: Pokemon) {
-        let p = await this.pokemonRepository.create(pokemon);
-        return this.pokemonRepository.save(p);
+    async create(pokemon: PokemonInput) {
+        let p = await this.pokemonRepository.create({
+            ...pokemon,
+            prev_evolution: pokemon.prev_evolution_nums.map(num => ({num})),
+            next_evolution: pokemon.next_evolution_nums.map(num => ({num})),
+        });
+
+        console.log('p', p);
+
+        // return this.pokemonService.create({
+        //     ...pokemon,
+        //     prev_evolution: pokemon.prev_evolution_nums.map(num => ({num})),
+        //     next_evolution: pokemon.next_evolution_nums
+        // });
+        return this.pokemonRepository.save(p)
     }
 }

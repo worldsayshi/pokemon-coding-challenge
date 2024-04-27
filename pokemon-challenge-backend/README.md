@@ -85,13 +85,25 @@ npm run typeorm \
 
 - [X] Create database in kubernetes or outside
 - [X] Create a proper "test rig"
-- [ ] TDD: Implement endpoint(s) for data ingestion
+- [X] Create initial migration for entities
+- [X] TDD: Implement endpoint for data ingestion
     - [X] Recheck the requirements to be sure I'm onm the right track! <-- HERE!
-    - [ ] Bug: next_evolution and prev_evolution are shown as string[] in swagger. That's not good...
+    - [X] Bug: multiplier field should be a float, not an integer! Need a migration.
+    - [/] Bug: next_evolution and prev_evolution are shown as string[] in swagger. That's not good...
         - I need to split the swagger type from the database type!
-    - [ ] Bug: multiplier field should be a float, not an integer! Need a migration.
+        - [ ] Verify that it works when retrieving it
 - [ ] TDD: Implement other endpoints.
-- [ ] Create initial migration for entities
+    - [ ] Get by id
+    - [ ] filter on type
+    - [ ] sorting by number properties
+    - [ ] Insert Pokemon with referenced Pokemon
+    - [ ] Get pokemon with referenced pokemon
+    - [ ] fuzzy search by name (minimum length 3 characters)
+    - [ ] suggest strong a good counter pokemon
+        - return a pokemon that is strong against a provided pokemon
+        - returned pokemon should be strong against provided and not weak against provided
+- [ ] Fix type and weaknesses type safety in data-utils.ts
+
 - [ ] Add pgadmin?
 - TDD:
     - globalSetup and globalTeardown

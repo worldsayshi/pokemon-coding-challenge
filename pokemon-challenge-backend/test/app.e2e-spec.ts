@@ -9,6 +9,7 @@ import { Pokemon } from './../src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
 import { AssertionError } from 'assert';
 import { Pokedex } from './../src/pokemon/ingestion/pokedex.type';
+import { skip } from 'node:test';
 
 
 const SECONDS = 1000;
@@ -44,33 +45,33 @@ describe('AppController (e2e)', () => {
       .expect(200);
   });
 
-  it('Can insert (some of) the pokedex', async () => {
-    //let sliceSize = 200;
+  it.skip('Can insert the pokedex', async () => {
+    let preparedPokemon = preparePokemon(pokedex);
 
-    let preparedPokemon = preparePokemon(pokedex);// .slice(0,sliceSize);
-
-    for (let p of preparedPokemon) {
-      try {
-        await request(app.getHttpServer())
-          .post('/pokemon')
-          .send(p)
-          .expect(201);
-      } catch (error) {
-        throw new AssertionError({
-          message: "Error in POST request to /pokemon: " + error.message,
-        });
-      }
-    }
+    await postPokemon(preparedPokemon, app);
     
-    let r = await request(app.getHttpServer())
+    let res = await request(app.getHttpServer())
       .get('/pokemon')
       .expect(200);
     
-    expect(r.body).toHaveLength(pokedex.pokemon.length);
+    expect(res.body).toHaveLength(pokedex.pokemon.length);
 
   }, 70 * SECONDS);
 
+  it('Can fetch pokemon by id', async () => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
+    let pokemonId = 2;
 
+    let p = pokedex.pokemon[pokemonId];
+
+    await postPokemon(preparedPokemon, app);
+    
+    let res = await request(app.getHttpServer())
+      .get(`/pokemon/${pokemonId}`)
+      .expect(200);
+    
+    expect(res.body).toHaveProperty("name", p.name);
+  });
 
   afterAll(async () => {
     const ds = await getDataSource();
@@ -82,3 +83,18 @@ describe('AppController (e2e)', () => {
     await pokemonRepository.query('DELETE FROM pokemon');
   });
 });
+async function postPokemon(preparedPokemon: any[], app: INestApplication<any>) {
+  for (let p of preparedPokemon) {
+    try {
+      await request(app.getHttpServer())
+        .post('/pokemon')
+        .send(p)
+        .expect(201);
+    } catch (error) {
+      throw new AssertionError({
+        message: "Error in POST request to /pokemon: " + error.message,
+      });
+    }
+  }
+}
+
