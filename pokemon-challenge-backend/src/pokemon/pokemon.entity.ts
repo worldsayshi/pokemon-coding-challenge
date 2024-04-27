@@ -1,5 +1,6 @@
 import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
+import { Transform } from 'class-transformer';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, PrimaryColumn, FindOptionsWhere } from 'typeorm';
 
 export enum Weakness {
   Fire = "Fire",
@@ -140,4 +141,9 @@ export class PokemonInput extends OmitType(Pokemon, ["prev_evolution", "next_evo
     description: 'The num attribute of the next evolution of this Pokemon',
   })
   next_evolution_nums: string[];
+}
+
+export class PokemonQuery {
+  type?: Weakness | Weakness[];
+  name?: string;
 }

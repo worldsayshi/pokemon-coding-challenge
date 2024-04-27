@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
-import { Pokemon, PokemonInput } from "./pokemon.entity";
-
+import { Pokemon, PokemonInput, PokemonQuery } from "./pokemon.entity";
 
 @Controller("pokemon")
 export class PokemonController {
@@ -11,8 +10,8 @@ export class PokemonController {
 
 
     @Get()
-    async getPokemon(): Promise<Pokemon[]> {
-        let ps = await this.pokemonService.getPokemon();
+    async findPokemon(@Query() query: PokemonQuery): Promise<Pokemon[]> {
+        let ps = await this.pokemonService.getPokemon(query);
         return ps;
     }
     
@@ -20,13 +19,6 @@ export class PokemonController {
     async getById(@Param('id', ParseIntPipe) id: number) {
         let res = await this.pokemonService.getById(id)
         return res;
-    }
-
-
-    // Update one Pokemon
-    @Put()
-    updatePokemon(@Body() pokemon: Pokemon) {
-      return this.pokemonService.update(pokemon);
     }
 
     // Post one Pokemon

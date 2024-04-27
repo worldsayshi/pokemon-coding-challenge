@@ -5,7 +5,7 @@ import { PokemonModule } from './../src/pokemon/pokemon.module';
 import * as pokedex from "../../data/pokedex.json";
 import { preparePokemon } from './../src/pokemon/ingestion/data-util';
 import {getModule, getDataSource} from "./testDataSource";
-import { Pokemon } from './../src/pokemon/pokemon.entity';
+import { Pokemon, Weakness } from './../src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
 import { AssertionError } from 'assert';
 import { Pokedex } from './../src/pokemon/ingestion/pokedex.type';
@@ -71,6 +71,23 @@ describe('AppController (e2e)', () => {
       .expect(200);
     
     expect(res.body).toHaveProperty("name", p.name);
+  });
+
+  it('Can filter Pokemon on type', async () => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
+    let pokemonType: Weakness = Weakness.Poison;
+
+    let p = pokedex.pokemon.filter(p => p.type.includes(pokemonType));
+
+    await postPokemon(preparedPokemon, app);
+    
+    let res = await request(app.getHttpServer())
+      .get(`/pokemon?type=${pokemonType}`)
+      .expect(200);
+    
+    (res.body as Pokemon[]).forEach(pokemon => {
+      expect(pokemon.type).toContain(pokemonType);
+    });
   });
 
   afterAll(async () => {

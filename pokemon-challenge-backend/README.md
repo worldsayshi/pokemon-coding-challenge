@@ -94,10 +94,11 @@ npm run typeorm \
         - [ ] Verify that it works when retrieving it
 - [ ] TDD: Implement other endpoints.
     - [X] Get by id
-    - [ ] filter on type
+    - [X] filter on type
     - [ ] sorting by number properties
     - [ ] Insert Pokemon with referenced Pokemon
         - https://github.com/typeorm/typeorm/issues/1224
+        - Probably need bulk insert for this!?
     - [ ] Get pokemon with referenced pokemon
     - [ ] fuzzy search by name (minimum length 3 characters)
     - [ ] suggest strong a good counter pokemon
