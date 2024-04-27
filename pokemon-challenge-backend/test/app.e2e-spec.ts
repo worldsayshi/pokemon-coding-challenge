@@ -8,8 +8,6 @@ import {getModule, getDataSource} from "./testDataSource";
 import { AscOrDesc, Pokemon, PokemonQuery, SortProperty, Weakness } from './../src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
 import { AssertionError } from 'assert';
-import { Pokedex } from './../src/pokemon/ingestion/pokedex.type';
-import { skip } from 'node:test';
 
 
 const SECONDS = 1000;
@@ -39,7 +37,7 @@ describe('AppController (e2e)', () => {
     pokemonRepository = moduleFixture.get('PokemonRepository');
   });
 
-  it.skip('Can insert the pokedex', async () => {
+  it('Can insert the pokedex', async () => {
     let preparedPokemon = preparePokemon(pokedex);
 
     await postPokemon(preparedPokemon, app);
@@ -117,7 +115,7 @@ describe('AppController (e2e)', () => {
     expect(p.name).toBe(pokemonName);
   });
 
-  test.each([["Venus", "Venusaur"], /*["sharmander","Charmander"]*/])('Can retrieve Pokemon by fuzzy name search', async (fuzzyPhrase, pokemonName) => {
+  test.each([["Venus", "Venusaur"], ["sharmander","Charmander"]])('Can retrieve Pokemon by fuzzy name search', async (fuzzyPhrase, pokemonName) => {
     let preparedPokemon = preparePokemon(pokedex).slice(0, 6);
 
     await postPokemon(preparedPokemon, app);

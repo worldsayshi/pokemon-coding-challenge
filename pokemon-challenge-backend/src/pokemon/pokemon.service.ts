@@ -37,11 +37,10 @@ export class PokemonService {
                     ).orWhere(
                         'name ILIKE :searchTerm',
                         { searchTerm: `%${name.fuzzy}%` }
+                    ).orWhere(
+                        'soundex_tsvector(name) @@ soundex_tsquery(:searchTerm)',
+                        { searchTerm: `%${name.fuzzy}%` }
                     );
-                    // qb.where(
-                    //     'edge_gram_tsvector(name) @@ to_tsquery(:searchTerm)',
-                    //     { searchTerm: `%${name.fuzzy}%` }
-                    // )
                 }
             ));
         }
