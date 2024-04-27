@@ -95,17 +95,17 @@ npm run typeorm \
 - [ ] TDD: Implement other endpoints.
     - [X] Get by id
     - [X] filter on type
-    - [ ] sorting by number properties
+    - [X] sorting by number properties
+    - [ ] fuzzy search by name (minimum length 3 characters)
     - [ ] Insert Pokemon with referenced Pokemon
         - https://github.com/typeorm/typeorm/issues/1224
         - Probably need bulk insert for this!?
     - [ ] Get pokemon with referenced pokemon
-    - [ ] fuzzy search by name (minimum length 3 characters)
     - [ ] suggest strong a good counter pokemon
         - return a pokemon that is strong against a provided pokemon
         - returned pokemon should be strong against provided and not weak against provided
 - [ ] Fix type and weaknesses type safety in data-utils.ts
-
+- [ ] Add script for actually inserting the data outside of tests
 - [ ] Add pgadmin?
 - TDD:
     - globalSetup and globalTeardown

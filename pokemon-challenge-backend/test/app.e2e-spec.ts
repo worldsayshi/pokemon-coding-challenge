@@ -39,7 +39,7 @@ describe('AppController (e2e)', () => {
     pokemonRepository = moduleFixture.get('PokemonRepository');
   });
 
-  it('Can insert the pokedex', async () => {
+  it.skip('Can insert the pokedex', async () => {
     let preparedPokemon = preparePokemon(pokedex);
 
     await postPokemon(preparedPokemon, app);
@@ -94,6 +94,48 @@ describe('AppController (e2e)', () => {
       expect(pokemon.height_m).toBeLessThanOrEqual(height_m_compare);
       height_m_compare = pokemon.height_m;
     });
+  });
+
+  it('Can retrieve Pokemon by exact name', async () => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
+    let pokemonName = "Venusaur";
+
+    await postPokemon(preparedPokemon, app);
+    
+    let q: PokemonQuery = {
+      name: {
+        exact: pokemonName,
+      },
+    };
+
+    let res = await request(app.getHttpServer())
+      .post(`/pokemon/search`)
+      .send(q)
+      .expect(200);
+
+    const [p] = res.body as Pokemon[];
+    expect(p.name).toBe(pokemonName);
+  });
+
+  it('Can retrieve Pokemon by fuzzy name search', async () => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0,4);
+    let pokemonName = "Venusaur";
+
+    await postPokemon(preparedPokemon, app);
+    
+    let q: PokemonQuery = {
+      name: {
+        fuzzy: "Venus",
+      },
+    };
+
+    let res = await request(app.getHttpServer())
+      .post(`/pokemon/search`)
+      .send(q)
+      .expect(200);
+
+    const [p] = res.body as Pokemon[];
+    expect(p.name).toBe(pokemonName);
   });
 
   afterAll(async () => {

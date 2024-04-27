@@ -137,10 +137,15 @@ export class SortOption {
   order: AscOrDesc
 }
 
+export class NameQuery {
+  exact?: string;
+  fuzzy?: string;
+}
+
 export class PokemonQuery {
   @Transform(singleItemToArray)
   type?: Weakness[];
-  name?: string;
+  name?: NameQuery;
   @Transform(singleItemToArray)
   order?: SortOption[];
 }

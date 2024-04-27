@@ -22,7 +22,7 @@ export class PokemonService {
         } = query;
         return this.pokemonRepository.find({
             where: {
-                ...(name && {name}),
+                ...(name?.exact && {name: name.exact}),
                 ...(type && {type: ArrayContains(
                     Array.isArray(type) ? type : [type]
                 ),})
