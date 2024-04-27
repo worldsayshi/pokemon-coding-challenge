@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon, PokemonInput } from "./pokemon.entity";
 
@@ -15,6 +15,13 @@ export class PokemonController {
         let ps = await this.pokemonService.getPokemon();
         return ps;
     }
+    
+    @Get(':id')
+    async getById(@Param('id', ParseIntPipe) id: number) {
+        let res = await this.pokemonService.getById(id)
+        return res;
+    }
+
 
     // Update one Pokemon
     @Put()

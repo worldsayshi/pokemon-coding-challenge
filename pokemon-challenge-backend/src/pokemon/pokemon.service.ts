@@ -17,6 +17,11 @@ export class PokemonService {
     async getPokemon(): Promise<Pokemon[]> {
         return this.pokemonRepository.find({});
     }
+
+    getById(id: number) {
+        return this.pokemonRepository.findOne({ where: { id }});
+    }
+
     update(pokemon: Pokemon) {
         throw new Error("Method not implemented.");
     }

@@ -1,5 +1,5 @@
 import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
 
 export enum Weakness {
   Fire = "Fire",
@@ -24,7 +24,7 @@ export enum Weakness {
 
 @Entity()
 export class Pokemon {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column('text')

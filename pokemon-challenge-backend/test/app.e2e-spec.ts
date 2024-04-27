@@ -62,7 +62,7 @@ describe('AppController (e2e)', () => {
     let preparedPokemon = preparePokemon(pokedex).slice(0,4);
     let pokemonId = 2;
 
-    let p = pokedex.pokemon[pokemonId];
+    let p = pokedex.pokemon.find(p => p.id === pokemonId);
 
     await postPokemon(preparedPokemon, app);
     

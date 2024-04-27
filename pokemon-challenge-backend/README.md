@@ -93,10 +93,11 @@ npm run typeorm \
         - I need to split the swagger type from the database type!
         - [ ] Verify that it works when retrieving it
 - [ ] TDD: Implement other endpoints.
-    - [ ] Get by id
+    - [X] Get by id
     - [ ] filter on type
     - [ ] sorting by number properties
     - [ ] Insert Pokemon with referenced Pokemon
+        - https://github.com/typeorm/typeorm/issues/1224
     - [ ] Get pokemon with referenced pokemon
     - [ ] fuzzy search by name (minimum length 3 characters)
     - [ ] suggest strong a good counter pokemon
