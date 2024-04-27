@@ -108,21 +108,41 @@ export class PokemonInput extends OmitType(Pokemon, ["prev_evolution", "next_evo
   next_evolution_nums: string[];
 }
 
-type SortProperty =
-  ("height_m"
-  | "weight_kg"
-  | "candy_count"
-  | "spawn_chance"
-  | "avg_spawns"
-  | "spawn_time_h"
-  | "spawn_time_m"
-);
+// export type SortProperty =
+//   ("height_m"
+//   | "weight_kg"
+//   | "candy_count"
+//   | "spawn_chance"
+//   | "avg_spawns"
+//   | "spawn_time_h"
+//   | "spawn_time_m"
+// );
+
+export enum SortProperty {
+  height_m = "height_m"
+  , weight_kg = "weight_kg"
+  , candy_count = "candy_count"
+  , spawn_chance = "spawn_chance"
+  , avg_spawns = "avg_spawns"
+  , spawn_time_h = "spawn_time_h"
+  , spawn_time_m = "spawn_time_m"
+}
+export enum AscOrDesc {
+  ASC = "ASC"
+  , DESC = "DESC"
+}
+
+export class SortOption {
+  name: SortProperty;
+  order: AscOrDesc
+}
 
 export class PokemonQuery {
   @Transform(singleItemToArray)
   type?: Weakness[];
   name?: string;
-  sort?: SortProperty | SortProperty[];
+  @Transform(singleItemToArray)
+  order?: SortOption[];
 }
 
 function singleItemToArray ({key, value}: TransformFnParams) {

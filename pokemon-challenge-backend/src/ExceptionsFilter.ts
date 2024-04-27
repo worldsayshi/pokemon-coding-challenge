@@ -25,6 +25,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     //     content = JSON.stringify(await exception);
     // }
 
+    console.error(JSON.stringify({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      content,
+    }));
     response
       .status(status)
       .json({

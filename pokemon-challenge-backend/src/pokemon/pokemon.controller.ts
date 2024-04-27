@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, HttpCode } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon, PokemonInput, PokemonQuery } from "./pokemon.entity";
 
@@ -8,21 +8,27 @@ export class PokemonController {
         private readonly pokemonService: PokemonService,
     ) {}
 
+    // @Get()
+    // async findPokemon(@Query() query: PokemonQuery): Promise<Pokemon[]> {
+    //     let ps = await this.pokemonService.getPokemon(query);
+    //     return ps;
+    // }
 
-    @Get()
-    async findPokemon(@Query() query: PokemonQuery): Promise<Pokemon[]> {
+    @Post("/search")
+    @HttpCode(200)
+    async searchPokemon(@Body() query?: PokemonQuery): Promise<Pokemon[]> {
         let ps = await this.pokemonService.getPokemon(query);
         return ps;
     }
     
-    @Get(':id')
+    @Get('/get/:id')
     async getById(@Param('id', ParseIntPipe) id: number) {
         let res = await this.pokemonService.getById(id)
         return res;
     }
 
     // Post one Pokemon
-    @Post()
+    @Post('/create')
     createPokemon(@Body() pokemon: PokemonInput) {
         return this.pokemonService.create(pokemon);
     }

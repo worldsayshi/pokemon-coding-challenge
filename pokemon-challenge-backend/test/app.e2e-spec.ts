@@ -5,7 +5,7 @@ import { PokemonModule } from './../src/pokemon/pokemon.module';
 import * as pokedex from "../../data/pokedex.json";
 import { preparePokemon } from './../src/pokemon/ingestion/data-util';
 import {getModule, getDataSource} from "./testDataSource";
-import { Pokemon, Weakness } from './../src/pokemon/pokemon.entity';
+import { AscOrDesc, Pokemon, PokemonQuery, SortProperty, Weakness } from './../src/pokemon/pokemon.entity';
 import { Repository } from 'typeorm';
 import { AssertionError } from 'assert';
 import { Pokedex } from './../src/pokemon/ingestion/pokedex.type';
@@ -39,19 +39,13 @@ describe('AppController (e2e)', () => {
     pokemonRepository = moduleFixture.get('PokemonRepository');
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/pokemon')
-      .expect(200);
-  });
-
-  it.skip('Can insert the pokedex', async () => {
+  it('Can insert the pokedex', async () => {
     let preparedPokemon = preparePokemon(pokedex);
 
     await postPokemon(preparedPokemon, app);
     
     let res = await request(app.getHttpServer())
-      .get('/pokemon')
+      .post('/pokemon/search')
       .expect(200);
     
     expect(res.body).toHaveLength(pokedex.pokemon.length);
@@ -67,13 +61,13 @@ describe('AppController (e2e)', () => {
     await postPokemon(preparedPokemon, app);
     
     let res = await request(app.getHttpServer())
-      .get(`/pokemon/${pokemonId}`)
+      .get(`/pokemon/get/${pokemonId}`)
       .expect(200);
     
     expect(res.body).toHaveProperty("name", p.name);
   });
 
-  it('Can filter Pokemon on type', async () => {
+  it('Can filter on type and sort Pokemon', async () => {
     let preparedPokemon = preparePokemon(pokedex).slice(0,4);
     let pokemonType: Weakness = Weakness.Poison;
 
@@ -81,12 +75,24 @@ describe('AppController (e2e)', () => {
 
     await postPokemon(preparedPokemon, app);
     
+    let q: PokemonQuery = {
+      type: [pokemonType],
+      order: [{
+        name: SortProperty.height_m,
+        order: AscOrDesc.DESC,
+      }],
+    };
+
     let res = await request(app.getHttpServer())
-      .get(`/pokemon?type=${pokemonType}`)
+      .post(`/pokemon/search`)
+      .send(q)
       .expect(200);
     
+    let height_m_compare = Number.MAX_VALUE;
     (res.body as Pokemon[]).forEach(pokemon => {
       expect(pokemon.type).toContain(pokemonType);
+      expect(pokemon.height_m).toBeLessThanOrEqual(height_m_compare);
+      height_m_compare = pokemon.height_m;
     });
   });
 
@@ -104,7 +110,7 @@ async function postPokemon(preparedPokemon: any[], app: INestApplication<any>) {
   for (let p of preparedPokemon) {
     try {
       await request(app.getHttpServer())
-        .post('/pokemon')
+        .post('/pokemon/create')
         .send(p)
         .expect(201);
     } catch (error) {

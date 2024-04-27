@@ -18,13 +18,20 @@ export class PokemonService {
         let {
             type,
             name,
+            order,
         } = query;
-        return this.pokemonRepository.find({ where: {
-            name,
-            type: ArrayContains(
-                Array.isArray(type) ? type : [type]
-            ),
-        }});
+        return this.pokemonRepository.find({
+            where: {
+                ...(name && {name}),
+                ...(type && {type: ArrayContains(
+                    Array.isArray(type) ? type : [type]
+                ),})
+            },
+            ...(order && {order: order.reduce((prev, curr) => ({
+                ...prev,
+                [curr.name]: curr.order,
+            }), {})}),
+        });
     }
 
     getById(id: number) {
