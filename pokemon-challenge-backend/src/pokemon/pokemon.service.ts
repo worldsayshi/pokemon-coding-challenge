@@ -83,4 +83,8 @@ export class PokemonService {
 
         return this.pokemonRepository.save(p)
     }
+
+    async getCounter(pokemon: Pokemon): Promise<Pokemon> {
+        throw new Error("Method not implemented.");
+    }
 }

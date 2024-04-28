@@ -135,6 +135,32 @@ describe('AppController (e2e)', () => {
     expect(p?.name).toBe(pokemonName);
   });
 
+
+  it('Can suggest Pokemon to counter another Pokemon', async () => {
+    let preparedPokemon = preparePokemon(pokedex);
+    let foe = preparedPokemon[0];
+
+    await postPokemon(preparedPokemon, app);
+
+    let res = await request(app.getHttpServer())
+      .post(`/pokemon/suggest-counter`)
+      .send(foe)
+      .expect(200);
+
+    const counter = res.body as Pokemon;
+    foe.type.forEach(t => {
+      expect(counter.weaknesses).not.toContain(t);
+    });
+
+    // The counter should not have any weakness to the elements of its foe
+    counter.weaknesses.forEach(t => {
+      expect(foe.type).not.toContain(t);
+    });
+    
+    // The counter should have at least one type that the foe is weak to
+    expect(counter.type.find(t => foe.weaknesses.includes(t))).toBeTruthy();
+  });
+
   afterAll(async () => {
     const ds = await getDataSource();
     ds.destroy();
@@ -144,7 +170,11 @@ describe('AppController (e2e)', () => {
   afterEach(async () => {
     await pokemonRepository.query('DELETE FROM pokemon');
   });
+
+
 });
+
+
 async function postPokemon(preparedPokemon: any[], app: INestApplication<any>) {
   for (let p of preparedPokemon) {
     try {
