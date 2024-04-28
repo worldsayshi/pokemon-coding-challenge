@@ -65,12 +65,10 @@ export async function postPokemon(endpoint, preparedPokemon: PokemonInput[]) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(preparePokemon)
+      body: JSON.stringify(preparedPokemon)
     });
-    const content = await rawResponse.json();
-
-    //console.log(content);
-    return content;
+    
+    return { status: rawResponse.status };
   } catch (error) {
     throw new Error("Error in POST request to /pokemon/insert-many: " + error.message);
   }

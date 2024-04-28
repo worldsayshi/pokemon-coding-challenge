@@ -217,17 +217,5 @@ async function postPokemon(preparedPokemon: any[], app: INestApplication<any>) {
       message: "Error in POST request to /pokemon/insert-many: " + error.message,
     });
   }
-  // for (let p of preparedPokemon) {
-  //   try {
-  //     await request(app.getHttpServer())
-  //       .post('/pokemon/create')
-  //       .send(p)
-  //       .expect(201);
-  //   } catch (error) {
-  //     throw new AssertionError({
-  //       message: "Error in POST request to /pokemon: " + error.message,
-  //     });
-  //   }
-  // }
 }
 
