@@ -6,9 +6,7 @@ import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class PokemonService {
-    createMany(pokemon: PokemonInput[]) {
-        throw new Error("Method not implemented.");
-    }
+
 
     constructor(
         @InjectRepository(Pokemon)
@@ -78,13 +76,69 @@ export class PokemonService {
     }
 
     async create(pokemon: PokemonInput) {
-        let p = await this.pokemonRepository.create({
-            ...pokemon,
-            prev_evolution: pokemon.prev_evolution_nums.map(num => ({num})),
-            next_evolution: pokemon.next_evolution_nums.map(num => ({num})),
-        });
+        return this.createMany([pokemon]);
+        // let qb = this.pokemonRepository.createQueryBuilder();
+        // pokemon.prev_evolution_nums.forEach((num) => {
+        //     qb.orWhere({ num });
+        // });
+        // pokemon.next_evolution_nums.forEach((num) => {
+        //     qb.orWhere({ num });
+        // });
 
-        return this.pokemonRepository.save(p);
+        // let pokemon_evolutions = await qb.getMany();
+
+        // let p = await this.pokemonRepository.create({
+        //     ...pokemon,
+        //     prev_evolution: pokemon.prev_evolution_nums.map(num =>
+        //         (pokemon_evolutions.find((evolution) => evolution.num === num))),
+        //     next_evolution: pokemon.next_evolution_nums.map(num =>
+        //         (pokemon_evolutions.find((evolution) => evolution.num === num))),
+        // });
+
+        // return this.pokemonRepository.save(p);
+    }
+
+    async createMany(pokemon: PokemonInput[]) {
+        // First save all pokemon without references
+        let p = await this.pokemonRepository.create(pokemon);
+        await this.pokemonRepository.save(p);
+
+        // Then gather all num references
+        let evolutionNums = Array.from(pokemon.reduce((num_set, current_pokemon) => {
+            current_pokemon.prev_evolution_nums.forEach(n => num_set.add(n));
+            current_pokemon.next_evolution_nums.forEach(n => num_set.add(n));
+            return num_set;
+        }, new Set<string>()).values());
+
+        // Fetch Pokemon corresponding to the nums
+        let evolutionPokemon = (await this.pokemonRepository.createQueryBuilder("pokemon")
+            .where(
+                'pokemon.num IN (:...evolutionNums)',
+                { evolutionNums }
+            ).getMany());
+
+        // Make a lookup table for the evolution pokemon
+        let evolutionPokemonLookup = evolutionPokemon.reduce((lookup, p) => {
+            lookup[p.num] = p;
+            return lookup;
+        }, {});
+        function evolutionPokemonLookupWithFallback (num: string) {
+            return evolutionPokemonLookup[num] ?? { num };
+        }
+
+        // Enrich the pokemon next and prev evolution relations using the fetched pokemon
+        let enrichedPokemon: Pokemon[] = pokemon.map(({
+            prev_evolution_nums,
+            next_evolution_nums,
+            ...rest
+        }) => {
+            return ({
+                ...rest,
+                prev_evolution: prev_evolution_nums.map(num => evolutionPokemonLookupWithFallback(num)),
+                next_evolution: next_evolution_nums.map(num => evolutionPokemonLookupWithFallback(num)),
+            });
+        });
+        return this.pokemonRepository.save(enrichedPokemon);
     }
 
     async getCounter(foe: Pokemon): Promise<Pokemon> {

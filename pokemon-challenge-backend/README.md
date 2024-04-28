@@ -97,11 +97,13 @@ npm run typeorm \
     - [X] filter on type
     - [X] sorting by number properties
     - [X] fuzzy search by name
-    - [ ] (minimum length 3 characters) <-- HERE!!
+    - [X] (minimum length 3 characters) <-- HERE!!
     - [ ] Insert Pokemon with referenced Pokemon
         - https://github.com/typeorm/typeorm/issues/1224
         - Probably need bulk insert for this!?
     - [ ] Get pokemon with referenced pokemon
+    - [ ] Test that it's possible to insert consecutive pokemon where the latter is referencing the first
+    - [ ] Test that it's not possible to insert consecutive pokemon if the first is referencing the latter that is not yet added
     - [X] suggest strong a good counter pokemon
         - returned pokemon should be strong against provided and not weak against provided
 - [X] Fix type and weaknesses type safety in data-utils.ts
