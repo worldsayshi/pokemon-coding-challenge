@@ -12,7 +12,7 @@ const sqlHost = process.env.POKEMON_SQL_HOST;
 const sqlPort = process.env.POKEMON_SQL_PORT;
 const sqlPokemonUsername = process.env.POKEMON_SQL_USERNAME;
 const sqlPokemonDb = process.env.POKEMON_SQL_DB;
-const sqlPassword = process.env.POKEMON_SQL_PASSWORD;
+const sqlPassword = process.env.POKEMON_SQL_PASSWORD_TEST;
 
 const initialOptions: DataSourceOptions = {
     type: 'postgres',

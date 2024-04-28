@@ -23,6 +23,11 @@ Add the following to /etc/hosts or c:\windows\system32\drivers\etc\hosts
 
 # Port forward
 
+Database:
 ```
 kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
+```
+And for the test database:
+```
+kubectl -n pokemon port-forward svc/pokemon-challenge-pg-test-rw 5433:5432
 ```

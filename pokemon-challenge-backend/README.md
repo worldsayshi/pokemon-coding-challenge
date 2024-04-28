@@ -8,7 +8,7 @@ However, the instructions should work with minimal adjustments for a local postg
 
 # Database setup
 ```bash
-POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+export POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 npm run typeorm \
     -- migration:run \
     -d db/dataSource.local-cluster.ts
@@ -22,14 +22,23 @@ kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 
 Make sure that variables in `.env` are set correctly, then run:
 ```bash
-POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+export POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 npm run start:dev
 ```
 
 # Run tests for backend
 
+Port forward the test db:
 ```bash
-POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+kubectl -n pokemon port-forward svc/pokemon-challenge-pg-test-rw 5433:5432
+```
+
+Migrate the test db, set the password and run the tests:
+```bash
+export POKEMON_SQL_PASSWORD_TEST=$(kubectl get -n pokemon secret pokemon-challenge-pg-test-app -o json | jq -r '.data.password | @base64d')
+npm run typeorm \
+    -- migration:run \
+    -d db/dataSource.local-cluster-test.ts
 npm run test:e2e
 ```
 
@@ -37,7 +46,7 @@ npm run test:e2e
 
 First, make sure that `POKEMON_SQL_PASSWORD` is set:
 ```bash
-POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
+export POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 ```
 
 ## Generate migration
@@ -70,7 +79,8 @@ npm run typeorm \
     - Let's use postgres directly (running the tests require postgres)
 
 
-# Future developments
+# "Future developments"
 
 - Opinion: Use Hasura and Graphql, at least for the backend <-> postgres logic.
     Hasura has better ergonomics for handling relational data.
+- Run automated builds, deployment, tests and promotion in k8s using ArgoCd and Argo Workflows
