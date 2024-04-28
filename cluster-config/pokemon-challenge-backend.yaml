@@ -1,0 +1,74 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: apps
+  name: ingress-pokemon-challenge-backend
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: pokemon-challenge.local-cluster
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pokemon-challenge-backend
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: apps
+  name: pokemon-challenge-backend
+spec:
+  selector:
+    app: pokemon-challenge-backend
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: 3100
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: apps
+  name: pokemon-challenge-backend
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pokemon-challenge-backend
+  template:
+    metadata:
+      labels:
+        app: pokemon-challenge-backend
+    spec:
+      containers:
+      - name: pokemon-challenge-backend
+        image: pfredelius/pokemon-challenge-backend:0.0.1
+        ports:
+        - containerPort: 3100
+        env:
+          - name: NODE_ENV
+            value: "production"
+
+          # SQL conf for the pokemon db
+          - name: POKEMON_SQL_HOST
+            value: pokemon-challenge-pg-rw.apps.svc.cluster.local
+          - name: POKEMON_SQL_PORT
+            value: "5432"
+          - name: POKEMON_SQL_USERNAME
+            value: "app"
+          - name: POKEMON_SQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pokemon-challenge-pg-app
+                key: password
+          - name: POKEMON_SQL_DB
+            value: "app"
+            
+---

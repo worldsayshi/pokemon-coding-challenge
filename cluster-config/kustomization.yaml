@@ -4,3 +4,4 @@ resources:
 - pokemon-ns.yaml
 - pokemon-challenge-pg.yaml
 - pokemon-challenge-pg-test.yaml
+- pokemon-challenge-backend.yaml

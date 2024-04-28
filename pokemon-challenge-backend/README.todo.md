@@ -25,7 +25,7 @@
         - returned pokemon should be strong against provided and not weak against provided
 - [X] Fix type and weaknesses type safety in data-utils.ts
 - [X] Add script for actually inserting the data outside of tests
-- [ ] Split test db and regular db
+- [X] Split test db and regular db
 - [-] Add pgadmin?
 - TDD:
     - globalSetup and globalTeardown

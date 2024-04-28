@@ -6,7 +6,9 @@ Documentation below assumes that postgres is running in kubernetes.
 For instructions on how to set this up see [README.k8s.md](../cluster-config/README.k8s.md).
 However, the instructions should work with minimal adjustments for a local postgres server.
 
-# Database setup
+# Getting it up and running
+
+## Database setup
 ```bash
 export POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 npm run typeorm \
@@ -18,12 +20,18 @@ Port forward:
 kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 ```
 
-# Run backend locally
+## Run backend locally
 
 Make sure that variables in `.env` are set correctly, then run:
 ```bash
 export POKEMON_SQL_PASSWORD=$(kubectl get -n pokemon secret pokemon-challenge-pg-app -o json | jq -r '.data.password | @base64d')
 npm run start:dev
+```
+
+## Insert data
+
+```bash
+npm run insert-data
 ```
 
 # Run tests for backend
@@ -42,7 +50,7 @@ npm run typeorm \
 npm run test:e2e
 ```
 
-# Dev actions
+# Other Dev actions
 
 First, make sure that `POKEMON_SQL_PASSWORD` is set:
 ```bash
