@@ -9,12 +9,6 @@ export class PokemonController {
         private readonly pokemonService: PokemonService,
     ) {}
 
-    // @Get()
-    // async findPokemon(@Query() query: PokemonQuery): Promise<Pokemon[]> {
-    //     let ps = await this.pokemonService.getPokemon(query);
-    //     return ps;
-    // }
-
     @Post("/search")
     @HttpCode(200)
     async searchPokemon(@Body() query?: PokemonQuery): Promise<Pokemon[]> {

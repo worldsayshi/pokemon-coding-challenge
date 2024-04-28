@@ -135,7 +135,7 @@ describe('AppController (e2e)', () => {
     expect(p?.name).toBe(pokemonName);
   });
 
-  it.only('Can not send fuzzy search phrase shorter than 2 characters long', async () => {
+  it('Can not send fuzzy search phrase shorter than 2 characters long', async () => {
     let preparedPokemon = preparePokemon(pokedex).slice(0, 6);
 
     await postPokemon(preparedPokemon, app);
