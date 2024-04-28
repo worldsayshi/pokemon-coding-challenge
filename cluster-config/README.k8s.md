@@ -11,7 +11,7 @@ https://docs.docker.com/desktop/kubernetes/
 
 # Deployment
 
-```
+```bash
 kubectl apply -k cluster-config
 ```
 
@@ -21,13 +21,16 @@ Add the following to /etc/hosts or c:\windows\system32\drivers\etc\hosts
 ::1 pokemon-challenge.local-cluster localhost
 ```
 
+> ℹ️ -> Then, to see the Swagger GUI, go to:
+>      http://pokemon-challenge.local-cluster/api
+
 # Port forward
 
 Database:
-```
+```bash
 kubectl -n pokemon port-forward svc/pokemon-challenge-pg-rw 5432:5432
 ```
 And for the test database:
-```
+```bash
 kubectl -n pokemon port-forward svc/pokemon-challenge-pg-test-rw 5433:5432
 ```

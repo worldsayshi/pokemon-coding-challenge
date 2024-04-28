@@ -1,12 +1,6 @@
-# Pokemon coding test
 
-This is an implementation of the [Pokemon coding test](../pokemon-coding-test.pdf)
 
-Documentation below assumes that postgres is running in kubernetes.
-For instructions on how to set this up see [README.k8s.md](../cluster-config/README.k8s.md).
-However, the instructions should work with minimal adjustments for a local postgres server.
-
-# Getting it up and running
+# Getting the backend up and running
 
 ## Database setup
 ```bash
