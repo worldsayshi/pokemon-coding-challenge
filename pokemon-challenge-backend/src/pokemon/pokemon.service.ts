@@ -57,22 +57,38 @@ export class PokemonService {
             }), {}));
         }
         return qb.getMany();
-        // return this.pokemonRepository.find({
-        //     where: {
-        //         ...(name?.exact && {name: name.exact}),
-        //         ...(type && {type: ArrayContains(
-        //             Array.isArray(type) ? type : [type]
-        //         ),})
-        //     },
-        //     ...(order && {order: order.reduce((prev, curr) => ({
-        //         ...prev,
-        //         [curr.name]: curr.order,
-        //     }), {})}),
-        // });
     }
 
-    getById(id: number) {
-        return this.pokemonRepository.findOne({ where: { id }});
+    async getById(id: number) {
+        let p = await this.pokemonRepository.createQueryBuilder('p')
+            .where({ id }).getOne();
+
+        p.prev_evolution = await this.pokemonRepository.createQueryBuilder('p')
+            .relation(Pokemon, "prev_evolution")
+            .of(p).loadMany();
+        for(let p_prev of p.prev_evolution) {
+            p_prev.prev_evolution = await this.pokemonRepository.createQueryBuilder('p')
+                .relation(Pokemon, "prev_evolution")
+                .of(p_prev).loadMany();
+            p_prev.next_evolution = await this.pokemonRepository.createQueryBuilder('p')
+                .relation(Pokemon, "next_evolution")
+                .of(p_prev).loadMany();
+        }
+            
+        p.next_evolution = await this.pokemonRepository.createQueryBuilder('p')
+            .relation(Pokemon, "next_evolution")
+            .of(p).loadMany();
+        for(let p_next of p.next_evolution) {
+            p_next.prev_evolution = await this.pokemonRepository.createQueryBuilder('p')
+                .relation(Pokemon, "prev_evolution")
+                .of(p_next).loadMany();
+            p_next.next_evolution = await this.pokemonRepository.createQueryBuilder('p')
+                .relation(Pokemon, "next_evolution")
+                .of(p_next).loadMany();
+        }
+        
+        return p;
+        // return this.pokemonRepository.findOne({ where: { id }});
     }
 
     async create(pokemon: PokemonInput) {
@@ -145,10 +161,10 @@ export class PokemonService {
         let qb = this.pokemonRepository.createQueryBuilder();
 
         // The counter should not have any weakness to the elements of its foe
-        qb.where('not :foeType && weaknesses', { foeType: foe.type });
+        qb = qb.where('not :foeType && weaknesses', { foeType: foe.type });
 
         // The counter should have at least one type that the foe is weak to
-        qb.andWhere(':foeWeaknesses && type', { foeWeaknesses: foe.weaknesses });
+        qb = qb.andWhere(':foeWeaknesses && type', { foeWeaknesses: foe.weaknesses });
 
         return qb.getOne();
     }

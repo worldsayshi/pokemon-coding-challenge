@@ -50,7 +50,7 @@ describe('AppController (e2e)', () => {
 
   }, 70 * SECONDS);
 
-  it.only('Can fetch pokemon by id', async () => {
+  it('Can fetch pokemon by id', async () => {
     let preparedPokemon = preparePokemon(pokedex).slice(0,4);
     let pokemonId = 2; // Ivysaur
 
@@ -74,7 +74,7 @@ describe('AppController (e2e)', () => {
 
     // Next reference in the evolution chain should also have their references
     let venusaur = ivusaur.next_evolution[0];
-    expect(venusaur.prev_evolution[0]?.name).toEqual("Ivysaur");
+    expect(venusaur.prev_evolution[1]?.name).toEqual("Ivysaur");
   });
 
   it('Can filter on type and sort Pokemon', async () => {

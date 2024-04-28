@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "DOTENV_CONFIG_PATH=.env.test jest --setupFiles=dotenv/config --config ./test/jest-e2e.json",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "insert-data": "ts-node ./scripts/insertData.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",

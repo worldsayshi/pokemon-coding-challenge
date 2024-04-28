@@ -136,3 +136,7 @@ npm run typeorm \
     - The Pokemon type in pokemon.entity is used both as a means for setting up the schema as well as providing the type for the pokemon.controller.
     - This means that the database schema is coupled with the rest api.
     - However, if there is a future need for the api and the db schema to diverge this can easily be changed without notifying consumers internally by using different types in the controller and the repository. So the coupling is thus of a loose kind.
+
+# Future developments
+
+- Opinion: Use Hasura and Graphql, at least for the backend <-> postgres work. Typeorm is not half as capable and ergonomic for relational data.
