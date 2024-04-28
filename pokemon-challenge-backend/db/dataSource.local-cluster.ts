@@ -7,7 +7,7 @@ let connectionOptions: DataSourceOptions = {
   host: "pokemon-challenge.local-cluster",
   port: PORT,
   username: "pokemon",
-  password: process.env.PGPASSWORD,
+  password: process.env.POKEMON_SQL_PASSWORD,
   database: "pokemon",
   synchronize: false, // if true, you don't really need migrations
   logging: true,
