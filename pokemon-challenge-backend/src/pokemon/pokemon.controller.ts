@@ -33,16 +33,31 @@ export class PokemonController {
         return ps;
     }
     
+    @ApiResponse({
+        status: 200,
+        description: "Get a Pokemon by id."
+    })
     @Get('/get/:id')
     async getById(@Param('id', ParseIntPipe) id: number): Promise<Pokemon> {
         let res = await this.pokemonService.getById(id)
         return res;
     }
 
-    // Post one Pokemon
+    @ApiResponse({
+        status: 201,
+        description: "Create one Pokemon."
+    })
     @Post('/create')
     createPokemon(@Body() pokemon: PokemonInput) {
         return this.pokemonService.create(pokemon);
     }
-    
+
+    @ApiResponse({
+        status: 201,
+        description: "Create many Pokemon."
+    })
+    @Post('/insert-many')
+    insertManyPokemon(@Body() pokemon: PokemonInput[]) {
+        return this.pokemonService.createMany(pokemon);
+    }
 }

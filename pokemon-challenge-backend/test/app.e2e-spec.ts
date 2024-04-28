@@ -38,6 +38,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('Can insert the pokedex', async () => {
+    throw new Error("Need insert in bulk to preserve references.");
     let preparedPokemon = preparePokemon(pokedex);
 
     await postPokemon(preparedPokemon, app);
@@ -50,11 +51,11 @@ describe('AppController (e2e)', () => {
 
   }, 70 * SECONDS);
 
-  it('Can fetch pokemon by id', async () => {
+  it.only('Can fetch pokemon by id', async () => {
     let preparedPokemon = preparePokemon(pokedex).slice(0,4);
-    let pokemonId = 2;
+    let pokemonId = 2; // Ivysaur
 
-    let p = pokedex.pokemon.find(p => p.id === pokemonId);
+    let pDex = pokedex.pokemon.find(p => p.id === pokemonId);
 
     await postPokemon(preparedPokemon, app);
     
@@ -62,7 +63,19 @@ describe('AppController (e2e)', () => {
       .get(`/pokemon/get/${pokemonId}`)
       .expect(200);
     
-    expect(res.body).toHaveProperty("name", p.name);
+    let ivusaur = res.body as Pokemon;
+
+    expect(ivusaur).toHaveProperty("name", pDex.name);
+
+    // We should get the next and prev evolution Pokemon
+    expect(ivusaur?.prev_evolution).toHaveLength(1);
+    expect(ivusaur?.next_evolution).toHaveLength(1);
+    expect(ivusaur?.prev_evolution[0]?.name).toEqual("Bulbasaur");
+    expect(ivusaur?.next_evolution[0]?.name).toEqual("Venusaur");
+
+    // Next reference in the evolution chain should also have their references
+    let venusaur = ivusaur.next_evolution[0];
+    expect(venusaur.prev_evolution[0]?.name).toEqual("Ivysaur");
   });
 
   it('Can filter on type and sort Pokemon', async () => {

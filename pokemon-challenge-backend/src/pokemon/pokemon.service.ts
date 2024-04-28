@@ -6,6 +6,9 @@ import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class PokemonService {
+    createMany(pokemon: PokemonInput[]) {
+        throw new Error("Method not implemented.");
+    }
 
     constructor(
         @InjectRepository(Pokemon)
@@ -81,7 +84,7 @@ export class PokemonService {
             next_evolution: pokemon.next_evolution_nums.map(num => ({num})),
         });
 
-        return this.pokemonRepository.save(p)
+        return this.pokemonRepository.save(p);
     }
 
     async getCounter(foe: Pokemon): Promise<Pokemon> {
