@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, HttpCode } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, HttpCode, HttpException, HttpStatus } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon, PokemonInput, PokemonQuery } from "./pokemon.entity";
 import { ApiResponse } from "@nestjs/swagger";
@@ -18,6 +18,12 @@ export class PokemonController {
     @Post("/search")
     @HttpCode(200)
     async searchPokemon(@Body() query?: PokemonQuery): Promise<Pokemon[]> {
+        if(query?.name?.fuzzy && query?.name?.fuzzy?.length < 3) {
+            throw new HttpException(
+                "Fuzzy search text needs to be at least 3 characters long",
+                HttpStatus.BAD_REQUEST,
+            );
+        }
         let ps = await this.pokemonService.getPokemon(query);
         return ps;
     }

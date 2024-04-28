@@ -135,8 +135,25 @@ describe('AppController (e2e)', () => {
     expect(p?.name).toBe(pokemonName);
   });
 
+  it.only('Can not send fuzzy search phrase shorter than 2 characters long', async () => {
+    let preparedPokemon = preparePokemon(pokedex).slice(0, 6);
 
-  it.only('Can suggest Pokemon to counter another Pokemon', async () => {
+    await postPokemon(preparedPokemon, app);
+    
+    let q: PokemonQuery = {
+      name: {
+        fuzzy: "ab",
+      },
+    };
+
+    await request(app.getHttpServer())
+      .post(`/pokemon/search`)
+      .send(q)
+      .expect(400);
+  });
+
+
+  it('Can suggest Pokemon to counter another Pokemon', async () => {
     let preparedPokemon = preparePokemon(pokedex);
     let foe = preparedPokemon[0];
 

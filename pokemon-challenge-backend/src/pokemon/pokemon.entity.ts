@@ -1,6 +1,8 @@
 import { ApiHideProperty, ApiProperty, OmitType } from '@nestjs/swagger';
 import { Transform, TransformFnParams } from 'class-transformer';
 import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
+import { TextLength } from './FuzzyQuery.validator';
+import { Validate } from 'class-validator';
 
 export enum Weakness {
   Fire = "Fire",
@@ -139,6 +141,9 @@ export class SortOption {
 
 export class NameQuery {
   exact?: string;
+  // @Validate(TextLength, [3], {
+  //   message: "Fuzzy search text needs to be at least 3 characters long"
+  // })
   fuzzy?: string;
 }
 

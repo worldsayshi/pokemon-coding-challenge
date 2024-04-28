@@ -102,11 +102,11 @@ npm run typeorm \
         - https://github.com/typeorm/typeorm/issues/1224
         - Probably need bulk insert for this!?
     - [ ] Get pokemon with referenced pokemon
-    - [ ] suggest strong a good counter pokemon
-        - return a pokemon that is strong against a provided pokemon
+    - [X] suggest strong a good counter pokemon
         - returned pokemon should be strong against provided and not weak against provided
-- [ ] Fix type and weaknesses type safety in data-utils.ts
+- [X] Fix type and weaknesses type safety in data-utils.ts
 - [ ] Add script for actually inserting the data outside of tests
+- [ ] Split test db and regular db
 - [ ] Add pgadmin?
 - TDD:
     - globalSetup and globalTeardown
