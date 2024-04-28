@@ -25,7 +25,7 @@ export class PokemonController {
     @Post("/suggest-counter")
     @ApiResponse({
         status: 200,
-        description: "Submit a Pokemon and get suggestions for a strong Pokemon to use as a counter."
+        description: "Submit a Pokemon and get a suggestion for a strong Pokemon to use as a counter."
     })
     @HttpCode(200)
     async suggestCounterPokemon(@Body() pokemon?: Pokemon): Promise<Pokemon> {

@@ -84,7 +84,15 @@ export class PokemonService {
         return this.pokemonRepository.save(p)
     }
 
-    async getCounter(pokemon: Pokemon): Promise<Pokemon> {
-        throw new Error("Method not implemented.");
+    async getCounter(foe: Pokemon): Promise<Pokemon> {
+        let qb = this.pokemonRepository.createQueryBuilder();
+
+        // The counter should not have any weakness to the elements of its foe
+        qb.where('not :foeType && weaknesses', { foeType: foe.type });
+
+        // The counter should have at least one type that the foe is weak to
+        qb.andWhere(':foeWeaknesses && type', { foeWeaknesses: foe.weaknesses });
+
+        return qb.getOne();
     }
 }

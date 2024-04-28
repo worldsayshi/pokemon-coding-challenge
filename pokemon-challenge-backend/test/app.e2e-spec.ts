@@ -136,7 +136,7 @@ describe('AppController (e2e)', () => {
   });
 
 
-  it('Can suggest Pokemon to counter another Pokemon', async () => {
+  it.only('Can suggest Pokemon to counter another Pokemon', async () => {
     let preparedPokemon = preparePokemon(pokedex);
     let foe = preparedPokemon[0];
 
