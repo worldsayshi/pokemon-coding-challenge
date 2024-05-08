@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, HttpCode, HttpException, HttpStatus, ValidationPipe, ParseArrayPipe } from "@nestjs/common";
 import { PokemonService } from "./pokemon.service";
 import { Pokemon, PokemonInput, PokemonQuery } from "./pokemon.entity";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiResponse } from "@nestjs/swagger";
 
 @Controller("pokemon")
 export class PokemonController {
@@ -57,6 +57,7 @@ export class PokemonController {
         description: "Create many Pokemon."
     })
     @Post('/insert-many')
+    @ApiBody({ type: [PokemonInput] })
     insertManyPokemon(@Body(new ParseArrayPipe({ items: PokemonInput })) pokemon: PokemonInput[]) {
         return this.pokemonService.createMany(pokemon);
     }

@@ -21,6 +21,8 @@ Add the following to /etc/hosts or c:\windows\system32\drivers\etc\hosts
 ::1 pokemon-challenge.local-cluster localhost
 ```
 
+Follow [Initial kubernetes setup](../pokemon-challenge-backend/README.md)
+
 > ℹ️ -> Then, to see the Swagger GUI, go to:
 >      http://pokemon-challenge.local-cluster/api
 

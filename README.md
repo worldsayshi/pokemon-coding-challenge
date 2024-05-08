@@ -14,5 +14,6 @@ For further instructions on running the backend and setting up the schema and su
 - Backend in Nest.js using TypeORM to connect to the DB
 - Jest tests that test the requirements
 - OpenAPI/Swagger spec and gui
-- Deployment configuration for deploying to Kubernetes
+- Deployment configuration for deploying the app and postgres to Kubernetes
+- migration scripts for migrating the database to the correct schema
 - Build scripts for building the app and pushing it to docker hub
